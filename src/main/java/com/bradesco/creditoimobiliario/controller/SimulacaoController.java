@@ -2,26 +2,27 @@ package com.bradesco.creditoimobiliario.controller;
 
 import com.bradesco.creditoimobiliario.dto.SimulacaoRequestDTO;
 import com.bradesco.creditoimobiliario.dto.SimulacaoResponseDTO;
+import com.bradesco.creditoimobiliario.service.SimulacaoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/simulacoes")
 public class SimulacaoController {
 
+    private final SimulacaoService simulacaoService;
+
+    // Injetando a Service de negócio dentro do Controller
+    public SimulacaoController(SimulacaoService simulacaoService) {
+        this.simulacaoService = simulacaoService;
+    }
+
     @PostMapping
     public ResponseEntity<SimulacaoResponseDTO> simular(@RequestBody SimulacaoRequestDTO request) {
-        // MOCK: Criando uma resposta falsa temporária só para a API compilar.
-        // Substituiremos isso pela chamada da Service no próximo passo!
-        SimulacaoResponseDTO mockResponse = new SimulacaoResponseDTO(
-                1L,
-                "APROVADO_MOCK",
-                BigDecimal.valueOf(1500.00)
-        );
+        // Chamando a Service real que calcula o crédito e salva no Postgres
+        SimulacaoResponseDTO response = simulacaoService.processarSimulacao(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(mockResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
