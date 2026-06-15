@@ -25,4 +25,11 @@ public class SimulacaoController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @GetMapping
+    public ResponseEntity<java.util.List<com.bradesco.creditoimobiliario.model.Simulacao>> obterHistorico() {
+        java.util.List<com.bradesco.creditoimobiliario.model.Simulacao> historico = simulacaoService.listarHistorico();
+        return ResponseEntity.ok(historico);
+    }
+
 }

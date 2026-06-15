@@ -56,4 +56,10 @@ public class SimulacaoService {
                 simulacaoSalva.getValorParcela()
         );
     }
+
+    // Novo método para buscar o histórico de simulações do banco
+    public java.util.List<Simulacao> listarHistorico() {
+        return simulacaoRepository.findAll();
+    }
+
 }
