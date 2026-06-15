@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: bradesco-credito-db
+    environment:
+      POSTGRES_USER: admin_credito
+      POSTGRES_PASSWORD: SenhaForteBradesco123
+      POSTGRES_DB: db_credito_imobiliario
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
