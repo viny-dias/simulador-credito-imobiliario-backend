@@ -18,6 +18,7 @@ public class SimulacaoService {
         this.simulacaoRepository = simulacaoRepository;
     }
 
+    @org.springframework.cache.annotation.CacheEvict(value = "historicoSimulacoes", allEntries = true)
     public SimulacaoResponseDTO processarSimulacao(SimulacaoRequestDTO request) {
         // Passo 1: Calcular o valor bruto da parcela mensal
         BigDecimal prazoMeses = BigDecimal.valueOf(request.prazoMeses());
@@ -58,6 +59,7 @@ public class SimulacaoService {
     }
 
     // Novo método para buscar o histórico de simulações do banco
+    @org.springframework.cache.annotation.Cacheable("historicoSimulacoes")
     public java.util.List<Simulacao> listarHistorico() {
         return simulacaoRepository.findAll();
     }

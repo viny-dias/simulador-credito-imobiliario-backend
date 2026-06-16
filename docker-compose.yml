@@ -13,6 +13,14 @@ services:
     networks:
       - credito-network
 
+  redis-cache:
+    image: redis:7-alpine
+    container_name: bradesco-credito-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - credito-network
+
   api-app:
     build: .
     container_name: bradesco-credito-api
@@ -20,8 +28,11 @@ services:
       - "8080:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/db_credito_imobiliario
+      - SPRING_DATA_REDIS_HOST=redis-cache
+      - SPRING_DATA_REDIS_PORT=6379
     depends_on:
       - postgres-db
+      - redis-cache
     networks:
       - credito-network
 
