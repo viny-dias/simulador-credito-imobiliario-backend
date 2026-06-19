@@ -21,6 +21,18 @@ services:
     networks:
       - credito-network
 
+  rabbitmq-broker:
+    image: rabbitmq:3-management-alpine
+    container_name: bradesco-credito-rabbitmq
+    ports:
+      - "5672:5672"   # Porta de comunicação que o Java usa para enviar mensagens
+      - "15672:15672" # Porta do painel visual (Dashboard) que abriremos no navegador
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin_bradesco
+      - RABBITMQ_DEFAULT_PASS=RabbitForte123
+    networks:
+      - credito-network
+
   api-app:
     build: .
     container_name: bradesco-credito-api
@@ -30,9 +42,14 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/db_credito_imobiliario
       - SPRING_DATA_REDIS_HOST=redis-cache
       - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_RABBITMQ_HOST=rabbitmq-broker
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin_bradesco
+      - SPRING_RABBITMQ_PASSWORD=RabbitForte123
     depends_on:
       - postgres-db
       - redis-cache
+      - rabbitmq-broker
     networks:
       - credito-network
 
